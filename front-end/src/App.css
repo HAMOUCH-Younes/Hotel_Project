@@ -1,38 +1,27 @@
-.App {
-  text-align: center;
+/* إجبار اللون الأبيض للنصوص و الأيقونات فـ Navbar */
+.navbar-dark .navbar-nav .nav-link,
+.navbar-dark .navbar-brand,
+.navbar-dark .fa-search,
+.navbar-dark .btn-light {
+  color: white !important;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* اختيارية: زيادة وضوح النص فوق الصور */
+.navbar-dark .navbar-nav .nav-link,
+.navbar-dark .navbar-brand {
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.toast-success {
+  background-color: #d4edda !important; /* أخضر مافتوح */
+  color: #155724 !important;
+  width: 150px;
+ 
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.toast-failed {
+  background-color: #f8d7da !important; /* أحمر مافتوح */
+  color: #721c24 !important;
+  border-radius: 8px;
+  font-weight: 500;
 }

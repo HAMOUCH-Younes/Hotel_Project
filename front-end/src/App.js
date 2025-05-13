@@ -1,19 +1,41 @@
-
 import './App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Routes, Route } from 'react-router-dom';
 
-
-import FeaturedDestinations from './Pages/Hotels';
-import HeroSection from './Pages/HeroSection';
+import Home from './Pages/HomePage/Home';
+import HotelCard from './Pages/HotelsRoom/Rooms';
+import Footer from './Compenents/Footer/Footer';
+import Navbar from './Compenents/Navbar/Navbar';
+import Booking from './Pages/BookPage/Booking';
+import Login from './Pages/Login/Login';
+import SignUp from './Pages/SignUp/SignUp';
+import FeedbackForm from './Pages/Feedback/Feedback';
+import ProfileInfo from './Pages/Profile/Profile';
+import EditProfile from './Pages/Profile/EditeProfile/EditeProfile';
+import ContactForm from './Pages/Contact/Contact';
+import Activitie from './Pages/Activitie/Activitie';
 
 function App() {
   return (
-    <div>
-      <HeroSection />
-      <FeaturedDestinations />
-    </div>
+    <>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/rooms" element={<HotelCard />} />
+        <Route path="/book" element={<Booking />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/commentaire" element={<FeedbackForm />} />
+        <Route path="/profile" element={<ProfileInfo />} />
+        <Route path="/profile/edit" element={<EditProfile />} />
+        <Route path="/contact" element={<ContactForm />} />
+        <Route path="/activitie" element={<Activitie />} />
+        <Route path="*" element={<div>Page not found</div>} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 

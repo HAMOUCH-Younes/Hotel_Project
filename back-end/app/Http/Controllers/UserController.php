@@ -10,13 +10,13 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::with('userDetail')->get();
         return response()->json($users);
     }
 
     public function show($id)
     {
-        $user = User::findOrFail($id);
+        $user = User::with('userDetail')->findOrFail($id);
         return response()->json($user);
     }
 
@@ -24,19 +24,78 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $validated = $request->validate([
+        // Validate user fields
+        $validatedUser = $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
             'password' => 'sometimes|string|min:8|confirmed',
             'role' => 'sometimes|in:guest,admin',
         ]);
 
-        if (isset($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
+        // Validate user details fields
+        $validatedDetails = $request->validate([
+            'bio' => 'sometimes|string|max:1000',
+            'date_of_birth' => 'sometimes|date',
+            'sex' => 'sometimes|in:Femme,Homme,Non binaire (X),Non déclaré (U)',
+            'accessibility_needs' => 'sometimes|string|max:255',
+            'phone_number' => 'sometimes|string|max:20',
+            'emergency_contact' => 'sometimes|string|max:255',
+            'address' => 'sometimes|string|max:1000',
+        ]);
+
+        // Update user fields
+        if (isset($validatedUser['password'])) {
+            $validatedUser['password'] = Hash::make($validatedUser['password']);
         }
+        $user->update($validatedUser);
 
-        $user->update($validated);
+        // Update or create user details
+        $user->userDetail()->updateOrCreate(
+            ['user_id' => $user->id],
+            $validatedDetails
+        );
 
+        // Reload user with details for response
+        $user->load('userDetail');
+        return response()->json($user);
+    }
+
+    public function updateCurrentUser(Request $request)
+    {
+        $user = $request->user();
+
+        // Validate user fields
+        $validatedUser = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|string|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'sometimes|string|min:8|confirmed',
+        ]);
+
+        // Validate user details fields
+        $validatedDetails = $request->validate([
+            'bio' => 'sometimes|string|max:1000',
+            'date_of_birth' => 'sometimes|date',
+            'sex' => 'sometimes|in:Femme,Homme,Non binaire (X),Non déclaré (U)',
+            'accessibility_needs' => 'sometimes|string|max:255',
+            'phone_number' => 'sometimes|string|max:20',
+            'emergency_contact' => 'sometimes|string|max:255',
+            'address' => 'sometimes|string|max:1000',
+        ]);
+
+        // Update user fields
+        if (isset($validatedUser['password'])) {
+            $validatedUser['password'] = Hash::make($validatedUser['password']);
+        }
+        $user->update($validatedUser);
+
+        // Update or create user details
+        $user->userDetail()->updateOrCreate(
+            ['user_id' => $user->id],
+            $validatedDetails
+        );
+
+        // Reload user with details for response
+        $user->load('userDetail');
         return response()->json($user);
     }
 
