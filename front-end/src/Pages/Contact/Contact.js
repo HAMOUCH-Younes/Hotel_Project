@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FaTimes } from 'react-icons/fa';
 
 function ContactForm() {
   const [formData, setFormData] = useState({
@@ -102,7 +103,7 @@ function ContactForm() {
   };
 
   return (
-    <div className="container d-flex justify-content-center mt-5">
+    <div className="container d-flex justify-content-center mt-5 mb-5">
       <div
         className="w-100"
         style={{
@@ -111,6 +112,13 @@ function ContactForm() {
           color: '#1a1a1a',
         }}
       >
+        <button
+                  className="btn btn-link text-danger position-absolute top-0 start-0 mt-2 ms-4"
+                  style={{ fontSize: '1.5rem', padding: 0 }}
+                  onClick={() => window.history.back()}
+                >
+                  <FaTimes />
+                </button>
         <h5 className="fw-bold mb-1">Contact</h5>
         <p className="text-muted mb-4" style={{ fontSize: '15px' }}>
           Partagez ces informations pour recevoir des mises à jour de voyages et des alertes liées à l’activité de votre compte.

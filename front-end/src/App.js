@@ -1,8 +1,9 @@
+// App.js
 import './App.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import Home from './Pages/HomePage/Home';
 import HotelCard from './Pages/HotelsRoom/Rooms';
@@ -16,11 +17,20 @@ import ProfileInfo from './Pages/Profile/Profile';
 import EditProfile from './Pages/Profile/EditeProfile/EditeProfile';
 import ContactForm from './Pages/Contact/Contact';
 import Activitie from './Pages/Activitie/Activitie';
+import Admin from './Admin/AdminDashbord/Dashbord';
+import Settings from './Pages/Profile/Settings/Settings';
 
 function App() {
+  const location = useLocation();
+
+  // Define routes where Navbar and Footer should be hidden
+  const hideLayout = ['/login', '/signup','/profile/edit','/contact','/profile/settings'].includes(location.pathname) || location.pathname.startsWith('/admin');
+
+
   return (
     <>
-      <Navbar />
+      {!hideLayout && <Navbar />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/rooms" element={<HotelCard />} />
@@ -32,9 +42,13 @@ function App() {
         <Route path="/profile/edit" element={<EditProfile />} />
         <Route path="/contact" element={<ContactForm />} />
         <Route path="/activitie" element={<Activitie />} />
+        <Route path="/admin" element={<Admin />} />
+         <Route path="/profile/settings" element={<Settings />} />
+
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>
-      <Footer />
+
+      {!hideLayout && <Footer />}
     </>
   );
 }

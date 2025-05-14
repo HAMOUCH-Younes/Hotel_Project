@@ -60,22 +60,29 @@ const Navbar = () => {
                         {user ? (
                             <div className="dropdown">
                                 <button
-                                    className="btn dropdown-toggle d-flex align-items-center"
-                                    type="button"
-                                    data-bs-toggle="dropdown"
-                                    aria-expanded="false"
-                                    style={{
-                                        background: 'transparent',
-                                        border: 'none',
-                                        color: isDarkNavbar ? '#fff' : '#000',
-                                        boxShadow: 'none',
-                                        appearance: 'none'
-                                    }}
-                                >
-                                    <i className="fas fa-user-circle fs-4 me-2"></i>
-
-                                    <span>{user.name}</span>
-                                </button>
+  className="btn dropdown-toggle d-flex align-items-center"
+  type="button"
+  data-bs-toggle="dropdown"
+  aria-expanded="false"
+  style={{
+    background: 'transparent',
+    border: 'none',
+    color: isDarkNavbar ? '#fff' : '#000',
+    boxShadow: 'none',
+    appearance: 'none',
+  }}
+>
+  {user?.user_detail?.icon ? (
+    <img
+      src={user.user_detail.icon}
+      alt="User Icon"
+      style={{ width: '32px', height: '32px', borderRadius: '50%', marginRight: '8px' }}
+    />
+  ) : (
+    <i className="fas fa-user-circle fs-4 me-2"></i>
+  )}
+  <span>{user.name}</span>
+</button>
 
                                 <ul
                                     className="dropdown-menu dropdown-menu-end p-4 shadow"
@@ -101,8 +108,6 @@ const Navbar = () => {
                         ) : (
                             <Link to="/login" className="btn btn-dark text-white rounded-pill px-4">Login</Link>
                         )}
-
-
                     </div>
                 </div>
             </div>

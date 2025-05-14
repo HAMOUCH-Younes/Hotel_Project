@@ -16,6 +16,8 @@ class UserDetail extends Model
         'phone_number',
         'emergency_contact',
         'address',
+        'cin',
+        'icon',
     ];
 
     public function user()

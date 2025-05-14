@@ -14,6 +14,8 @@ function ProfileInfo() {
     phone_number: 'Non précisé',
     emergency_contact: 'Non précisé',
     address: 'Non précisée',
+    cin: 'Non précisé', // Added for CIN
+    icon: 'Aucune icône sélectionnée', // Added for user icon
   });
   const [error, setError] = useState(null);
 
@@ -42,13 +44,15 @@ function ProfileInfo() {
         setUserData({
           name: data.name || 'Non précisé',
           email: data.email || 'Non précisé',
-          bio: data.user_detail?.bio || 'Non précisée', // Changed from userDetail to user_detail
-          date_of_birth: data.user_detail?.date_of_birth || 'Non précisée', // Changed from userDetail to user_detail
-          sex: data.user_detail?.sex || 'Non précisé', // Changed from userDetail to user_detail
-          accessibility_needs: data.user_detail?.accessibility_needs || 'Non précisés', // Changed from userDetail to user_detail
-          phone_number: data.user_detail?.phone_number || 'Non précisé', // Changed from userDetail to user_detail
-          emergency_contact: data.user_detail?.emergency_contact || 'Non précisé', // Changed from userDetail to user_detail
-          address: data.user_detail?.address || 'Non précisée', // Changed from userDetail to user_detail
+          bio: data.user_detail?.bio || 'Non précisée',
+          date_of_birth: data.user_detail?.date_of_birth || 'Non précisée',
+          sex: data.user_detail?.sex || 'Non précisé',
+          accessibility_needs: data.user_detail?.accessibility_needs || 'Non précisés',
+          phone_number: data.user_detail?.phone_number || 'Non précisé',
+          emergency_contact: data.user_detail?.emergency_contact || 'Non précisé',
+          address: data.user_detail?.address || 'Non précisée',
+          cin: data.user_detail?.cin || 'Non précisé', // Fetch CIN
+          icon: data.user_detail?.icon || 'Aucune icône sélectionnée', // Fetch icon
         });
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load profile data. Please try again.');
@@ -58,7 +62,7 @@ function ProfileInfo() {
   }, []);
 
   return (
-    <div className="container mt-5 d-flex justify-content-center">
+    <div className="container mt-5 d-flex justify-content-center ">
       <div
         className="bg-white rounded shadow-sm p-4 w-100"
         style={{
@@ -77,7 +81,7 @@ function ProfileInfo() {
         {/* Informations de base */}
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="fw-bold mb-0">Informations de base</h5>
-          <Link to="/profile/edit" className="text-primary fw-semibold" style={{ textDecoration: 'none' }}> {/* Updated to /editprofile */}
+          <Link to="/profile/edit" className="text-primary fw-semibold" style={{ textDecoration: 'none' }}>
             Modifier
           </Link>
         </div>
@@ -108,6 +112,36 @@ function ProfileInfo() {
           </div>
         </div>
 
+        {/* Account Settings */}
+        <div className="d-flex justify-content-between align-items-center mb-3 mt-5">
+          <h5 className="fw-bold mb-0">Paramètres du compte</h5>
+          <Link to="/profile/settings" className="text-primary fw-semibold" style={{ textDecoration: 'none' }}>
+            Modifier
+          </Link>
+        </div>
+        <p className="text-muted mb-4">
+          Gérez votre e-mail, mot de passe, icône de compte et CIN.
+        </p>
+
+        <div className="row mb-5">
+          <div className="col-md-6 mb-3">
+            <strong>Email</strong><br />
+            {userData.email}
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong>Mot de passe</strong><br />
+            **********
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong>Icône user</strong><br />
+            {userData.icon}
+          </div>
+          <div className="col-md-6 mb-3">
+            <strong>CIN</strong><br />
+            {userData.cin}
+          </div>
+        </div>
+
         {/* Contact */}
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="fw-bold mb-0">Contact</h5>
@@ -119,7 +153,7 @@ function ProfileInfo() {
           Partagez ces informations pour recevoir des mises à jour de voyages et des alertes liées à l’activité de votre compte.
         </p>
 
-        <div className="row">
+        <div className="row mb-5">
           <div className="col-md-6 mb-3">
             <strong>Numéro de téléphone portable</strong><br />
             {userData.phone_number}
@@ -137,6 +171,8 @@ function ProfileInfo() {
             {userData.address}
           </div>
         </div>
+
+        
       </div>
     </div>
   );

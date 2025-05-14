@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { FaTimes } from 'react-icons/fa';
 
 function EditProfile() {
   const [formData, setFormData] = useState({
@@ -124,7 +125,7 @@ function EditProfile() {
   };
 
   return (
-    <div className="container d-flex justify-content-center mt-5">
+    <div className="container d-flex justify-content-center mt-5 mb-5">
       <div
         className="w-100"
         style={{
@@ -133,6 +134,14 @@ function EditProfile() {
           color: '#1a1a1a',
         }}
       >
+        <button
+          className="btn btn-link text-danger position-absolute top-0 start-0 mt-2 ms-4"
+          style={{ fontSize: '1.5rem', padding: 0 }}
+          onClick={() => window.history.back()}
+        >
+          <FaTimes />
+        </button>
+
         <h5 className="fw-bold mb-1">Informations de base</h5>
         <p className="text-muted mb-4" style={{ fontSize: '15px' }}>
           Assurez-vous que ces informations correspondent à votre pièce d’identité pour le voyage, par exemple votre passeport.
