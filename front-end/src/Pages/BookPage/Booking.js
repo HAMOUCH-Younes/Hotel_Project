@@ -57,7 +57,8 @@ const Booking = () => {
                 const response = await axios.get(`http://127.0.0.1:8000/api/rooms/${roomId}`);
                 const roomData = response.data;
                 setRoom(roomData);
-                setMainImage(roomData.image || 'https://via.placeholder.com/800x600');
+                // Set mainImage to the first image in the array, or fallback
+                setMainImage(roomData.image && roomData.image.length > 0 ? roomData.image[0] : 'https://via.placeholder.com/800x600');
             } catch (err) {
                 setError('Failed to load room details. Please try again.');
             } finally {

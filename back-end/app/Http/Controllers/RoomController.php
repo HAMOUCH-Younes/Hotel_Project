@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
-use App\Models\Booking; // Assuming a Booking model exists
+use App\Models\Booking;
+use App\Models\RoomImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class RoomController extends Controller
 {
@@ -12,7 +14,6 @@ class RoomController extends Controller
     {
         $query = Room::with(['hotel', 'amenities', 'images']);
 
-        // Filters for hotel_id, price_min, price_max, amenity_ids, sort
         if ($request->has('hotel_id')) {
             $query->where('hotel_id', $request->hotel_id);
         }
@@ -40,7 +41,7 @@ class RoomController extends Controller
             $query->take($request->query('limit'));
         }
         $rooms = $query->get()->map(function ($room) {
-            $room->image = $room->images->first()?->image ?? null;
+            $room->image = $room->images->pluck('image')->toArray();
             return $room;
         });
 
@@ -50,7 +51,7 @@ class RoomController extends Controller
     public function show($id)
     {
         $room = Room::with(['hotel', 'amenities', 'images'])->findOrFail($id);
-        $room->image = $room->images->first()?->image ?? null;
+        $room->image = $room->images->pluck('image')->toArray();
         return response()->json($room);
     }
 
@@ -67,7 +68,6 @@ class RoomController extends Controller
         $checkIn = new \DateTime($validated['check_in']);
         $checkOut = new \DateTime($validated['check_out']);
 
-        // Check for overlapping bookings
         $overlappingBookings = Booking::where('room_id', $room->id)
             ->where(function ($query) use ($checkIn, $checkOut) {
                 $query->whereBetween('check_in', [$checkIn, $checkOut])
@@ -102,12 +102,21 @@ class RoomController extends Controller
             'max_guests' => 'required|integer|min:1',
             'amenity_ids' => 'nullable|array',
             'amenity_ids.*' => 'exists:amenities,id',
+            'image_urls' => 'nullable|array|max:4',
+            'image_urls.*' => 'url', // Validate each URL
         ]);
 
-        $room = Room::create($validated);
+        $room = Room::create(array_diff_key($validated, ['image_urls' => '']));
 
         if (!empty($validated['amenity_ids'])) {
             $room->amenities()->attach($validated['amenity_ids']);
+        }
+
+        if (!empty($validated['image_urls'])) {
+            $images = array_map(function ($url) use ($room) {
+                return new RoomImage(['image' => $url, 'room_id' => $room->id]);
+            }, $validated['image_urls']);
+            $room->images()->saveMany($images);
         }
 
         return response()->json($room->load(['hotel', 'amenities', 'images']), 201);
@@ -125,12 +134,22 @@ class RoomController extends Controller
             'max_guests' => 'sometimes|integer|min:1',
             'amenity_ids' => 'nullable|array',
             'amenity_ids.*' => 'exists:amenities,id',
+            'image_urls' => 'nullable|array|max:4',
+            'image_urls.*' => 'url',
         ]);
 
-        $room->update($validated);
+        $room->update(array_diff_key($validated, ['image_urls' => '']));
 
         if (isset($validated['amenity_ids'])) {
             $room->amenities()->sync($validated['amenity_ids']);
+        }
+
+        if (isset($validated['image_urls'])) {
+            $room->images()->delete(); // Remove existing images
+            $images = array_map(function ($url) use ($room) {
+                return new RoomImage(['image' => $url, 'room_id' => $room->id]);
+            }, $validated['image_urls']);
+            $room->images()->saveMany($images);
         }
 
         return response()->json($room->load(['hotel', 'amenities', 'images']));
@@ -139,6 +158,7 @@ class RoomController extends Controller
     public function destroy($id)
     {
         $room = Room::findOrFail($id);
+        $room->images()->delete();
         $room->delete();
 
         return response()->json(['message' => 'Room deleted successfully']);

@@ -16,6 +16,8 @@ const Rooms = () => {
     sortBy: '',
   });
 
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,6 +92,16 @@ const Rooms = () => {
     navigate(`/book?room_id=${roomId}`);
   };
 
+  
+
+  
+
+  
+
+  
+
+  
+
   return (
     <div className="container py-5" style={{ marginTop: '60px' }}>
       <div className="mb-5">
@@ -111,7 +123,7 @@ const Rooms = () => {
               <div className="row g-0">
                 <div className="col-md-5 position-relative">
                   <img
-                    src={room.image || fallbackImage}
+                    src={room.image && room.image.length > 0 ? room.image[0] : fallbackImage}
                     alt={room.name}
                     className="img-fluid h-100 object-fit-cover"
                     style={{ objectFit: 'cover' }}
@@ -147,19 +159,22 @@ const Rooms = () => {
                   <h5 className="fw-bold mt-3">
                     ${room.price_per_night} <small className="text-muted fw-normal">/night</small>
                   </h5>
-                  <button
-                    className="btn btn-outline-secondary mt-2"
-                    onClick={() => handleBookNow(room.id)}
-                  >
-                    Book Now
-                  </button>
+                  <div className="d-flex gap-2 mt-2">
+                    <button
+                      className="btn btn-outline-secondary"
+                      onClick={() => handleBookNow(room.id)}
+                    >
+                      Book Now
+                    </button>
+                    
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Filters Sidebar (Modified) */}
+        {/* Filters Sidebar */}
         <div className="col-lg-4 d-none d-lg-block">
           <div
             className="border rounded-4 shadow-sm"
@@ -171,7 +186,6 @@ const Rooms = () => {
               flexDirection: 'column',
             }}
           >
-            {/* Sticky Header */}
             <div
               className="p-4"
               style={{
@@ -192,8 +206,6 @@ const Rooms = () => {
                 </button>
               </div>
             </div>
-
-            {/* Scrollable Filter Content */}
             <div className="p-4" style={{ overflowY: 'auto' }}>
               {/* Amenities Filter */}
               <div className="mb-4">
@@ -256,6 +268,8 @@ const Rooms = () => {
           </div>
         </div>
       </div>
+
+      
     </div>
   );
 };

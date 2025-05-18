@@ -19,6 +19,11 @@ import ContactForm from './Pages/Contact/Contact';
 import Activitie from './Pages/Activitie/Activitie';
 import Admin from './Admin/AdminDashbord/Dashbord';
 import Settings from './Pages/Profile/Settings/Settings';
+import Hotels from './Admin/Tables/Hotels/Hotels';
+import Rooms from './Admin/Tables/Rooms/Rooms';
+import Bookings from './Admin/Tables/Bookings/Bookings';
+import Users from './Admin/Tables/Users/Users';
+import EditBooking from './Admin/Tables/Bookings/EditBooking';
 
 function App() {
   const location = useLocation();
@@ -44,6 +49,17 @@ function App() {
         <Route path="/activitie" element={<Activitie />} />
         <Route path="/admin" element={<Admin />} />
          <Route path="/profile/settings" element={<Settings />} />
+
+         <Route path="/admin/hotels" element={<Hotels />} />
+         <Route path="/admin/rooms" element={<Rooms />} />
+         <Route path="/admin/bookings" element={<Bookings />} />
+         
+        <Route path="/admin/bookings/edit/:id" element={<EditBooking />} />
+
+
+
+         <Route path="/admin/users" element={<Users />} />
+         
 
         <Route path="*" element={<div>Page not found</div>} />
       </Routes>

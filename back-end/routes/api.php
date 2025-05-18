@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -9,7 +10,6 @@ use App\Http\Controllers\HotelController;
 use App\Http\Controllers\AmenityController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ReviewController;
-
 use App\Http\Middleware\EnsureAdmin;
 
 // 🔓 Public Routes (no auth required)
@@ -28,23 +28,19 @@ Route::post('/rooms/{id}/check-availability', [RoomController::class, 'checkAvai
 
 // 🔐 Authenticated User Routes
 Route::middleware(['auth:sanctum'])->group(function () {
-    
     // ✅ General user actions
     Route::get('/user', function (Request $request) {
         return $request->user()->load('userDetail');
     });
-    Route::put('/user', [UserController::class, 'updateCurrentUser']); // Added route to update current user
+    Route::put('/user', [UserController::class, 'updateCurrentUser']);
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
-
-
-    Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 
     // 🔒 Admin Only Routes
     Route::middleware([EnsureAdmin::class])->group(function () {
-        
         // User management
         Route::get('/users', [UserController::class, 'index']);
         Route::get('/users/{id}', [UserController::class, 'show']);
@@ -55,5 +51,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/rooms', [RoomController::class, 'store']);
         Route::put('/rooms/{id}', [RoomController::class, 'update']);
         Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
+
+        // Booking management
+        Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
+        Route::put('/admin/bookings/{id}', [BookingController::class, 'update']);
+        Route::put('/bookings/{id}/toggle-status', [BookingController::class, 'toggleStatus']);
     });
 });
