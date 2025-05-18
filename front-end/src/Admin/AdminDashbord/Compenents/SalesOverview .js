@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Card } from 'react-bootstrap';
 import {
   ResponsiveContainer,
   AreaChart,
@@ -8,22 +9,23 @@ import {
   CartesianGrid,
   Tooltip,
 } from 'recharts';
-import { Card } from 'react-bootstrap';
 
 const data = [
-  { name: 'Jan', sales: 400 },
-  { name: 'Feb', sales: 700 },
-  { name: 'Mar', sales: 500 },
-  { name: 'Apr', sales: 800 },
-  { name: 'May', sales: 650 },
-  { name: 'Jun', sales: 900 },
-  { name: 'Jul', sales: 750 },
+  { name: 'Apr', sales: 300 },
+  { name: 'May', sales: 400 },
+  { name: 'Jun', sales: 500 },
+  { name: 'Jul', sales: 600 },
+  { name: 'Aug', sales: 700 },
+  { name: 'Sep', sales: 650 },
+  { name: 'Oct', sales: 800 },
+  { name: 'Nov', sales: 750 },
+  { name: 'Dec', sales: 900 },
 ];
 
 const SalesOverview = () => {
-  const [animatedData, setAnimatedData] = useState([]);
+  const [animatedData, setAnimatedData] = React.useState([]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     let i = 0;
     const interval = setInterval(() => {
       if (i <= data.length) {
@@ -38,52 +40,51 @@ const SalesOverview = () => {
 
   return (
     <Card
-      className="pt-4 mb-4 shadow-sm border-0"
-      style={{
-        borderRadius: '1rem',
-        height: '420px',
-        overflow: 'hidden',
-      }}
+      className="mb-4 shadow-sm"
+      style={{ borderRadius: '1rem', overflow: 'hidden', height: '400px' }}
     >
-      <h5 className="mb-4">Sales Overview</h5>
-      <div style={{ width: '100%', height: '100%' }}>
-        <ResponsiveContainer width="95%" height="85%">
-          <AreaChart
-            data={animatedData}
-            margin={{ top:10, right: 0, left: 0, bottom: 0 }}
-          >
+      <Card.Body>
+        <h5 className="text-muted mb-3">Sales Overview</h5>
+        <small className="text-success mb-3 d-block">↑ 4% more in 2022</small>
+        <ResponsiveContainer width="100%" height={300}>
+          <AreaChart data={animatedData} margin={{ top: 15, right: 15, left: -20, bottom: 0 }}>
             <defs>
               <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#007bff" stopOpacity={0.4} />
-                <stop offset="100%" stopColor="#007bff" stopOpacity={0} />
+                <stop offset="0%" stopColor="#17c1e8" stopOpacity={0.4} />
+                <stop offset="100%" stopColor="#17c1e8" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} horizontal strokeDasharray="5 5" />
+            <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e0e0e0" />
             <XAxis
               dataKey="name"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888', fontSize: 12 }}
+              tick={{ fill: '#666', fontSize: 14 }}
+              interval="preserveStartEnd"
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: '#888', fontSize: 12 }}
+              tick={{ fill: '#666', fontSize: 14 }}
+              domain={[0, 1000]}
             />
-            <Tooltip />
+            <Tooltip
+              contentStyle={{ backgroundColor: 'rgba(0,0,0,0.8)', borderRadius: '0.5rem', border: 'none' }}
+              itemStyle={{ color: '#fff', fontSize: 14 }}
+            />
             <Area
               type="monotone"
               dataKey="sales"
-              stroke="#007bff"
+              stroke="#17c1e8"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorSales)"
               isAnimationActive={true}
-              animationDuration={1000}
+              animationDuration={1500}
             />
           </AreaChart>
         </ResponsiveContainer>
-      </div>
+      </Card.Body>
     </Card>
   );
 };
