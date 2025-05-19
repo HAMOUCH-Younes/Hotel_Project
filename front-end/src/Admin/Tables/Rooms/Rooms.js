@@ -144,7 +144,7 @@ const Rooms = () => {
   return (
     <Layout>
       <div className="container mt-5">
-        <div className="bg-white shadow-sm rounded-top px-4 py-3 border d-flex justify-content-between align-items-center">
+        <div className="bg-white shadow-sm  px-4 py-3 border d-flex justify-content-between align-items-center" style={{ borderTopLeftRadius: '15px', borderTopRightRadius: '15px' }}>
           <h5 className="mb-0 fw-bold">Rooms List</h5>
           <button className="btn btn-primary" onClick={() => setAdding(true)}>
             Add Room

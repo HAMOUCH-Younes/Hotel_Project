@@ -21,7 +21,7 @@ const Hotels = () => {
         });
         const roomsWithData = response.data.map((room) => ({
           id: room.id,
-          image: room.image || fallbackImage, // Use first image from room.images via backend
+          image: room.image || fallbackImage, // Use first image or fallback
           bestSeller: room.price_per_night < 200, // Example logic: rooms under $200
           title: room.name,
           address: room.hotel?.address || 'Unknown Address',
@@ -71,6 +71,9 @@ const Hotels = () => {
                     className="card-img-top"
                     alt={room.title}
                     style={{ height: '200px', objectFit: 'cover' }}
+                    onError={(e) => {
+                      e.target.src = fallbackImage; // Fallback on image load failure
+                    }}
                   />
                   {room.bestSeller && (
                     <span className="badge bg-light text-dark position-absolute top-0 start-0 m-2">Best Seller</span>

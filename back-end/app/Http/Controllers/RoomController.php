@@ -11,42 +11,43 @@ use Illuminate\Support\Facades\Storage;
 class RoomController extends Controller
 {
     public function index(Request $request)
-    {
-        $query = Room::with(['hotel', 'amenities', 'images']);
+{
+    $query = Room::with(['hotel', 'amenities', 'images']);
 
-        if ($request->has('hotel_id')) {
-            $query->where('hotel_id', $request->hotel_id);
-        }
-        if ($request->has('price_min')) {
-            $query->where('price_per_night', '>=', $request->price_min);
-        }
-        if ($request->has('price_max')) {
-            $query->where('price_per_night', '<=', $request->price_max);
-        }
-        if ($request->has('amenity_ids')) {
-            $query->whereHas('amenities', function ($q) use ($request) {
-                $q->whereIn('amenities.id', explode(',', $request->amenity_ids));
-            });
-        }
-        if ($request->has('sort')) {
-            if ($request->sort === 'Price Low to High') {
-                $query->orderBy('price_per_night', 'asc');
-            } elseif ($request->sort === 'Price High to Low') {
-                $query->orderBy('price_per_night', 'desc');
-            } elseif ($request->sort === 'Newest First') {
-                $query->orderBy('created_at', 'desc');
-            }
-        }
-        if ($request->has('limit')) {
-            $query->take($request->query('limit'));
-        }
-        $rooms = $query->get()->map(function ($room) {
-            $room->image = $room->images->pluck('image')->toArray();
-            return $room;
-        });
-
-        return response()->json($rooms);
+    if ($request->has('hotel_id')) {
+        $query->where('hotel_id', $request->hotel_id);
     }
+    if ($request->has('price_min')) {
+        $query->where('price_per_night', '>=', $request->price_min);
+    }
+    if ($request->has('price_max')) {
+        $query->where('price_per_night', '<=', $request->price_max);
+    }
+    if ($request->has('amenity_ids')) {
+        $query->whereHas('amenities', function ($q) use ($request) {
+            $q->whereIn('amenities.id', explode(',', $request->amenity_ids));
+        });
+    }
+    if ($request->has('sort')) {
+        if ($request->sort === 'Price Low to High') {
+            $query->orderBy('price_per_night', 'asc');
+        } elseif ($request->sort === 'Price High to Low') {
+            $query->orderBy('price_per_night', 'desc');
+        } elseif ($request->sort === 'Newest First') {
+            $query->orderBy('created_at', 'desc');
+        }
+    }
+    if ($request->has('limit')) {
+        $query->take($request->query('limit'));
+    }
+    $rooms = $query->get()->map(function ($room) {
+        $imageArray = $room->images->pluck('image')->toArray();
+        $room->image = !empty($imageArray) ? $imageArray[0] : null; // Set first image or null
+        return $room;
+    });
+
+    return response()->json($rooms);
+}
 
     public function show($id)
     {

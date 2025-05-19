@@ -17,7 +17,7 @@ import ProfileInfo from './Pages/Profile/Profile';
 import EditProfile from './Pages/Profile/EditeProfile/EditeProfile';
 import ContactForm from './Pages/Contact/Contact';
 import Activitie from './Pages/Activitie/Activitie';
-import Admin from './Admin/AdminDashbord/Dashbord';
+import Dashboard from './Admin/AdminDashbord/Dashbord';
 import Settings from './Pages/Profile/Settings/Settings';
 import Hotels from './Admin/Tables/Hotels/Hotels';
 import Rooms from './Admin/Tables/Rooms/Rooms';
@@ -47,7 +47,7 @@ function App() {
         <Route path="/profile/edit" element={<EditProfile />} />
         <Route path="/contact" element={<ContactForm />} />
         <Route path="/activitie" element={<Activitie />} />
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin" element={<Dashboard />} />
          <Route path="/profile/settings" element={<Settings />} />
 
          <Route path="/admin/hotels" element={<Hotels />} />

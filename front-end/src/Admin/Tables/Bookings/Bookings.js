@@ -127,7 +127,7 @@ const Bookings = () => {
 
   if (loading) return <div className="text-center mt-5">Loading...</div>;
   if (error) return <div className="alert alert-danger mt-5">{error}</div>;
-
+    
   return (
     <Layout>
       <div className="container mt-5">
@@ -152,7 +152,7 @@ const Bookings = () => {
                 <tr key={booking.id} onClick={() => setSelected(booking)} style={{ cursor: 'pointer' }}>
                   <td className="d-flex align-items-center gap-3">
                     <img
-                      src={booking.user?.avatar || 'https://i.pravatar.cc/40?img=1'}
+                      src={booking.user.user_detail?.icon || 'https://i.pravatar.cc/40?img=1'}
                       alt="Avatar"
                       className="rounded-circle"
                       width="45"

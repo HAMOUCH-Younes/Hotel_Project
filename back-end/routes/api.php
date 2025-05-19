@@ -43,6 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::middleware([EnsureAdmin::class])->group(function () {
         // User management
         Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
         Route::get('/users/{id}', [UserController::class, 'show']);
         Route::put('/users/{id}', [UserController::class, 'update']);
         Route::delete('/users/{id}', [UserController::class, 'destroy']);
@@ -52,6 +53,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/rooms/{id}', [RoomController::class, 'update']);
         Route::delete('/rooms/{id}', [RoomController::class, 'destroy']);
 
+        // Hotel management
+        Route::post('/hotels', [HotelController::class, 'store']);
+        Route::put('/hotels/{id}', [HotelController::class, 'update']);
+        Route::delete('/hotels/{id}', [HotelController::class, 'destroy']);
+        
         // Booking management
         Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
         Route::put('/admin/bookings/{id}', [BookingController::class, 'update']);

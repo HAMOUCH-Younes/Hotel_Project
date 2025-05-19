@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -15,20 +16,28 @@ class ReviewController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Review::with(['user', 'hotel']);
+        try {
+            $query = Review::with(['user.userDetail', 'hotel']); // Load user with userDetail and hotel
 
-        // Filter by hotel_id if provided
-        if ($request->has('hotel_id')) {
-            $query->where('hotel_id', $request->hotel_id);
+            // Filter by hotel_id if provided
+            if ($request->has('hotel_id')) {
+                $query->where('hotel_id', $request->hotel_id);
+            }
+
+            // Limit number of reviews if provided
+            if ($request->has('limit')) {
+                $query->take((int)$request->query('limit'));
+            }
+
+            $reviews = $query->get();
+            return response()->json($reviews);
+        } catch (\Exception $e) {
+            Log::error('Failed to fetch reviews: ' . $e->getMessage());
+            return response()->json([
+                'error' => 'Failed to fetch reviews.',
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        // Limit number of reviews if provided
-        if ($request->has('limit')) {
-            $query->take((int)$request->query('limit'));
-        }
-
-        $reviews = $query->get();
-        return response()->json($reviews);
     }
 
     /**
@@ -51,7 +60,7 @@ class ReviewController extends Controller
         $review = Review::create($validated);
 
         // Load relationships for the response
-        $review->load(['user', 'hotel']);
+        $review->load(['user.userDetail', 'hotel']);
 
         return response()->json([
             'message' => 'Review created successfully.',
@@ -67,7 +76,7 @@ class ReviewController extends Controller
      */
     public function show($id)
     {
-        $review = Review::with(['user', 'hotel'])->findOrFail($id);
+        $review = Review::with(['user.userDetail', 'hotel'])->findOrFail($id);
         return response()->json($review);
     }
 }

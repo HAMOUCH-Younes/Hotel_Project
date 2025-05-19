@@ -75,7 +75,7 @@ const Layout = ({ children }) => {
           {/* Dashboard */}
           <li style={{ marginBottom: '6px' }}>
             <Link
-              to="/dashboard"
+              to="/admin"
               style={{
                 backgroundColor: isActive('/dashboard') ? '#e0f7fa' : '',
                 borderRadius: '0.5rem',
