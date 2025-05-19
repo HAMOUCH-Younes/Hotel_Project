@@ -16,8 +16,6 @@ const Rooms = () => {
     sortBy: '',
   });
 
-
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -92,16 +90,6 @@ const Rooms = () => {
     navigate(`/book?room_id=${roomId}`);
   };
 
-  
-
-  
-
-  
-
-  
-
-  
-
   return (
     <div className="container py-5" style={{ marginTop: '60px' }}>
       <div className="mb-5">
@@ -127,6 +115,7 @@ const Rooms = () => {
                     alt={room.name}
                     className="img-fluid h-100 object-fit-cover"
                     style={{ objectFit: 'cover' }}
+                    onError={(e) => { e.target.src = fallbackImage; }}
                   />
                   {room.hotel?.is_best_seller && (
                     <span className="badge bg-light text-dark position-absolute top-0 start-0 m-2">Best Seller</span>
@@ -166,7 +155,6 @@ const Rooms = () => {
                     >
                       Book Now
                     </button>
-                    
                   </div>
                 </div>
               </div>
@@ -268,8 +256,6 @@ const Rooms = () => {
           </div>
         </div>
       </div>
-
-      
     </div>
   );
 };

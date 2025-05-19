@@ -164,9 +164,9 @@ const Layout = ({ children }) => {
 
           {/* Other Links */}
           {[
-            { path: '/billing', icon: 'credit-card', text: 'Billing', color: '#4caf50' },
-            { path: '/vr', icon: 'cube', text: 'Virtual Reality', color: '#03a9f4' },
-            { path: '/rtl', icon: 'globe', text: 'RTL', color: '#e91e63' },
+            { path: '/offers', icon: 'credit-card', text: 'Offers', color: '#4caf50' },
+            { path: '/vr', icon: 'cube', text: 'Contacts', color: '#03a9f4' },
+            { path: '/rtl', icon: 'globe', text: 'N .Letter', color: '#e91e63' },
           ].map((item, idx) => (
             <li key={idx} style={{ marginBottom: '6px' }}>
               <Link
@@ -207,7 +207,7 @@ const Layout = ({ children }) => {
           {/* Account links */}
           {[
             { path: '/profile', icon: 'user', text: 'Profile', color: '#3f51b5' },
-            { path: '/signin', icon: 'file-alt', text: 'Sign In', color: '#f44336' },
+            { path: '/signin', icon: 'file-alt', text: 'Sign Out', color: '#f44336' },
           ].map((item, idx) => (
             <li key={idx} style={{ marginBottom: '6px' }}>
               <Link

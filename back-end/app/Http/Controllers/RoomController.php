@@ -41,8 +41,7 @@ class RoomController extends Controller
         $query->take($request->query('limit'));
     }
     $rooms = $query->get()->map(function ($room) {
-        $imageArray = $room->images->pluck('image')->toArray();
-        $room->image = !empty($imageArray) ? $imageArray[0] : null; // Set first image or null
+        $room->image = $room->images->pluck('image')->toArray(); // Return array of images
         return $room;
     });
 
