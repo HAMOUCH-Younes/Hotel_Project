@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 const Layout = ({ children }) => {
   const location = useLocation();
   const [showTableList, setShowTableList] = useState(false);
+  const [showOffersList, setShowOffersList] = useState(false); // New state for Offers submenu
 
   const isActive = (path) => location.pathname === path;
 
@@ -77,7 +78,7 @@ const Layout = ({ children }) => {
             <Link
               to="/admin"
               style={{
-                backgroundColor: isActive('/dashboard') ? '#e0f7fa' : '',
+                backgroundColor: isActive('/admin') ? '#e0f7fa' : '',
                 borderRadius: '0.5rem',
                 padding: '0.5rem 0.75rem',
                 fontSize: '0.85rem',
@@ -119,12 +120,12 @@ const Layout = ({ children }) => {
                 {['hotels', 'rooms', 'bookings', 'users'].map((sub, i) => (
                   <li key={i} style={{ marginBottom: '0.6rem' }}>
                     <Link
-                      to={`${sub}`}
+                      to={`/admin/${sub}`} // Changed to absolute path
                       style={{
                         fontSize: '0.8rem',
                         textDecoration: 'none',
-                        color: isActive(`/${sub}`) ? '#11cdf0' : '#555',
-                        fontWeight: isActive(`/${sub}`) ? '600' : '400',
+                        color: isActive(`/admin/${sub}`) ? '#11cdf0' : '#555',
+                        fontWeight: isActive(`/admin/${sub}`) ? '600' : '400',
                         paddingLeft: '0.5rem',
                         display: 'inline-block',
                         transition: 'color 0.3s',
@@ -150,11 +151,66 @@ const Layout = ({ children }) => {
                             }[sub],
                           }}
                         ></i>
-
                         {sub.charAt(0).toUpperCase() + sub.slice(1)}
                       </>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
 
+          {/* Offers with Submenu */}
+          <li style={{ marginBottom: '6px' }}>
+            <div
+              onClick={() => setShowOffersList(!showOffersList)}
+              style={{
+                cursor: 'pointer',
+                padding: '0.5rem 0.75rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.85rem',
+                color: '#344767',
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'background-color 0.3s',
+              }}
+            >
+              <i className="fas fa-credit-card me-2" style={{ color: '#4caf50' }}></i>
+              Offers
+            </div>
 
+            {showOffersList && (
+              <ul style={{ listStyle: 'none', paddingLeft: '1.5rem', marginTop: '0.5rem', transition: 'all 1s ease' }}>
+                {['offers', 'add-offers'].map((sub, i) => (
+                  <li key={i} style={{ marginBottom: '0.6rem' }}>
+                    <Link
+                      to={`/admin/${sub}`} // Changed to absolute path
+                      style={{
+                        fontSize: '0.8rem',
+                        textDecoration: 'none',
+                        color: isActive(`/admin/${sub}`) ? '#11cdf0' : '#555',
+                        fontWeight: isActive(`/admin/${sub}`) ? '600' : '400',
+                        paddingLeft: '0.5rem',
+                        display: 'inline-block',
+                        transition: 'color 0.3s',
+                      }}
+                    >
+                      <>
+                        <i style={{ color: '#11cdf0' }}>{`->  `}</i>
+                        <i
+                          className={`fas ${{
+                            offers: 'fa-list',
+                            'add-offers': 'fa-plus'
+                          }[sub]} me-2`}
+                          style={{
+                            width: '18px',
+                            textAlign: 'center',
+                            color: '#4caf50',
+                          }}
+                        ></i>
+                        {sub === 'offers' ? 'List Offers' : 'Add Offers'}
+                      </>
                     </Link>
                   </li>
                 ))}
@@ -164,7 +220,6 @@ const Layout = ({ children }) => {
 
           {/* Other Links */}
           {[
-            { path: '/offers', icon: 'credit-card', text: 'Offers', color: '#4caf50' },
             { path: '/vr', icon: 'cube', text: 'Contacts', color: '#03a9f4' },
             { path: '/rtl', icon: 'globe', text: 'N .Letter', color: '#e91e63' },
           ].map((item, idx) => (
@@ -207,7 +262,7 @@ const Layout = ({ children }) => {
           {/* Account links */}
           {[
             { path: '/profile', icon: 'user', text: 'Profile', color: '#3f51b5' },
-            { path: '/signin', icon: 'file-alt', text: 'Sign Out', color: '#f44336' },
+            { path: '/signout', icon: 'file-alt', text: 'Sign Out', color: '#f44336' },
           ].map((item, idx) => (
             <li key={idx} style={{ marginBottom: '6px' }}>
               <Link

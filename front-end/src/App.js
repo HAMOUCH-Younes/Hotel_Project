@@ -24,6 +24,8 @@ import Rooms from './Admin/Tables/Rooms/Rooms';
 import Bookings from './Admin/Tables/Bookings/Bookings';
 import Users from './Admin/Tables/Users/Users';
 import EditBooking from './Admin/Tables/Bookings/EditBooking';
+import ListOffers from './Admin/Offers/ListOffers';
+import AddOffer from './Admin/Offers/AddOffer';
 
 function App() {
   const location = useLocation();
@@ -59,6 +61,9 @@ function App() {
 
 
          <Route path="/admin/users" element={<Users />} />
+         <Route path="/admin/add-offers" element={<AddOffer/>} />
+         <Route path="/admin/offers" element={<ListOffers />} />
+         
          
 
         <Route path="*" element={<div>Page not found</div>} />

@@ -57,10 +57,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/hotels', [HotelController::class, 'store']);
         Route::put('/hotels/{id}', [HotelController::class, 'update']);
         Route::delete('/hotels/{id}', [HotelController::class, 'destroy']);
-        
+
         // Booking management
         Route::get('/admin/bookings', [BookingController::class, 'adminIndex']);
         Route::put('/admin/bookings/{id}', [BookingController::class, 'update']);
         Route::put('/bookings/{id}/toggle-status', [BookingController::class, 'toggleStatus']);
+
+
+        Route::get('/offers/{id}', [OfferController::class, 'show']);
+        Route::post('/offers', [OfferController::class, 'store']); // Assuming store exists
+        Route::put('/offers/{id}', [OfferController::class, 'update']);
+        Route::delete('/offers/{id}', [OfferController::class, 'destroy']);
     });
 });
