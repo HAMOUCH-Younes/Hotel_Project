@@ -8,9 +8,12 @@ use App\Http\Controllers\RoomController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\AmenityController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\NewsletterSubscriptionController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Middleware\EnsureAdmin;
+
 
 // 🔓 Public Routes (no auth required)
 Route::post('/register', [AuthController::class, 'register']);
@@ -22,9 +25,12 @@ Route::get('/hotels/{id}', [HotelController::class, 'show']);
 Route::get('/amenities', [AmenityController::class, 'index']);
 Route::get('/offers', [OfferController::class, 'index']);
 Route::get('/offers/{id}', [OfferController::class, 'show']);
-Route::get('/reviews', [ReviewController::class, 'index']);
-Route::get('/reviews/{id}', [ReviewController::class, 'show']);
 Route::post('/rooms/{id}/check-availability', [RoomController::class, 'checkAvailability']);
+Route::get('/reviews', [ReviewController::class, 'index']);
+Route::post('/newsletter-subscribe', [NewsletterSubscriptionController::class, 'subscribe']);
+
+// New public route for testimonials
+Route::get('/testimonials', [ReviewController::class, 'testimonials']);
 
 // 🔐 Authenticated User Routes
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -37,7 +43,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
     Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::get('/reviews/{id}', [ReviewController::class, 'show']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/contacts', [ContactController::class, 'store']);
+    Route::get('/users-without-contacts', [ContactController::class, 'usersWithoutContacts']);
 
     // 🔒 Admin Only Routes
     Route::middleware([EnsureAdmin::class])->group(function () {
@@ -63,10 +72,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/admin/bookings/{id}', [BookingController::class, 'update']);
         Route::put('/bookings/{id}/toggle-status', [BookingController::class, 'toggleStatus']);
 
-
-        Route::get('/offers/{id}', [OfferController::class, 'show']);
-        Route::post('/offers', [OfferController::class, 'store']); // Assuming store exists
+        // Offer management
+        Route::post('/offers', [OfferController::class, 'store']);
         Route::put('/offers/{id}', [OfferController::class, 'update']);
         Route::delete('/offers/{id}', [OfferController::class, 'destroy']);
+
+        // Contact management
+        Route::get('/contacts', [ContactController::class, 'index']);
+        Route::put('/contacts/{id}', [ContactController::class, 'update']);
+        Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
+
+        // Review management
+        
+        Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+        Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
     });
 });
