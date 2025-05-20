@@ -1,12 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const Layout = ({ children }) => {
   const location = useLocation();
   const [showTableList, setShowTableList] = useState(false);
   const [showOffersList, setShowOffersList] = useState(false);
+  const [showNewsletterList, setShowNewsletterList] = useState(false);
 
   const isActive = (path) => location.pathname === path;
+
+  // Check if the current path is within a submenu to keep it open
+  const isSubmenuActive = (basePath) => {
+    const paths = {
+      tables: ['/admin/hotels', '/admin/rooms', '/admin/bookings', '/admin/users'],
+      offers: ['/admin/offers', '/admin/add-offers'],
+      newsletter: ['/admin/newsletter', '/admin/newsletter-list'],
+    };
+    return paths[basePath].some((path) => isActive(path));
+  };
+
+  // Update submenu states based on current location
+  useEffect(() => {
+    setShowTableList((prev) => prev || isSubmenuActive('tables'));
+    setShowOffersList((prev) => prev || isSubmenuActive('offers'));
+    setShowNewsletterList((prev) => prev || isSubmenuActive('newsletter'));
+  }, [location.pathname]);
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', backgroundColor: '#f8f9fa' }}>
@@ -74,14 +92,14 @@ const Layout = ({ children }) => {
         {/* Navigation */}
         <ul className="list-unstyled" style={{ paddingLeft: 0, marginBottom: 0 }}>
           {/* Dashboard */}
-          <li style={{ marginBottom: '6px' }}>
+          <li style={{ marginBottom: '12px' }}>
             <Link
               to="/admin"
               style={{
-                backgroundColor: isActive('/admin') ? '#e0f7fa' : '',
+                backgroundColor: isActive('/admin') ? '#d4edda' : '',
                 borderRadius: '0.5rem',
-                padding: '0.5rem 0.75rem',
-                fontSize: '0.85rem',
+                padding: '0.75rem 1rem',
+                fontSize: '1rem',
                 fontWeight: '500',
                 color: '#344767',
                 display: 'flex',
@@ -96,14 +114,14 @@ const Layout = ({ children }) => {
           </li>
 
           {/* Tables with Submenu */}
-          <li style={{ marginBottom: '6px' }}>
+          <li style={{ marginBottom: '12px' }}>
             <div
               onClick={() => setShowTableList(!showTableList)}
               style={{
                 cursor: 'pointer',
-                padding: '0.5rem 0.75rem',
+                padding: '0.75rem 1rem',
                 borderRadius: '0.5rem',
-                fontSize: '0.85rem',
+                fontSize: '1rem',
                 color: '#344767',
                 fontWeight: '500',
                 display: 'flex',
@@ -118,17 +136,20 @@ const Layout = ({ children }) => {
             {showTableList && (
               <ul style={{ listStyle: 'none', paddingLeft: '1.5rem', marginTop: '0.5rem', transition: 'all 1s ease' }}>
                 {['hotels', 'rooms', 'bookings', 'users'].map((sub, i) => (
-                  <li key={i} style={{ marginBottom: '0.6rem' }}>
+                  <li key={i} style={{ marginBottom: '12px' }}>
                     <Link
                       to={`/admin/${sub}`}
                       style={{
-                        fontSize: '0.8rem',
+                        fontSize: '0.9rem',
                         textDecoration: 'none',
                         color: isActive(`/admin/${sub}`) ? '#11cdf0' : '#555',
                         fontWeight: isActive(`/admin/${sub}`) ? '600' : '400',
                         paddingLeft: '0.5rem',
                         display: 'inline-block',
-                        transition: 'color 0.3s',
+                        backgroundColor: isActive(`/admin/${sub}`) ? '#d4edda' : '',
+                        borderRadius: '0.5rem',
+                        padding: '0.5rem 0.75rem',
+                        transition: 'color 0.3s, background-color 0.3s',
                       }}
                     >
                       <>
@@ -161,14 +182,14 @@ const Layout = ({ children }) => {
           </li>
 
           {/* Offers with Submenu */}
-          <li style={{ marginBottom: '6px' }}>
+          <li style={{ marginBottom: '12px' }}>
             <div
               onClick={() => setShowOffersList(!showOffersList)}
               style={{
                 cursor: 'pointer',
-                padding: '0.5rem 0.75rem',
+                padding: '0.75rem 1rem',
                 borderRadius: '0.5rem',
-                fontSize: '0.85rem',
+                fontSize: '1rem',
                 color: '#344767',
                 fontWeight: '500',
                 display: 'flex',
@@ -183,17 +204,20 @@ const Layout = ({ children }) => {
             {showOffersList && (
               <ul style={{ listStyle: 'none', paddingLeft: '1.5rem', marginTop: '0.5rem', transition: 'all 1s ease' }}>
                 {['offers', 'add-offers'].map((sub, i) => (
-                  <li key={i} style={{ marginBottom: '0.6rem' }}>
+                  <li key={i} style={{ marginBottom: '12px' }}>
                     <Link
                       to={`/admin/${sub}`}
                       style={{
-                        fontSize: '0.8rem',
+                        fontSize: '0.9rem',
                         textDecoration: 'none',
                         color: isActive(`/admin/${sub}`) ? '#11cdf0' : '#555',
                         fontWeight: isActive(`/admin/${sub}`) ? '600' : '400',
                         paddingLeft: '0.5rem',
                         display: 'inline-block',
-                        transition: 'color 0.3s',
+                        backgroundColor: isActive(`/admin/${sub}`) ? '#d4edda' : '',
+                        borderRadius: '0.5rem',
+                        padding: '0.5rem 0.75rem',
+                        transition: 'color 0.3s, background-color 0.3s',
                       }}
                     >
                       <>
@@ -219,19 +243,20 @@ const Layout = ({ children }) => {
           </li>
 
           {/* Contacts */}
-          <li style={{ marginBottom: '6px' }}>
+          <li style={{ marginBottom: '12px' }}>
             <Link
               to="/admin/contacts"
               style={{
-                padding: '0.5rem 0.75rem',
+                padding: '0.75rem 1rem',
                 borderRadius: '0.5rem',
-                fontSize: '0.85rem',
+                fontSize: '1rem',
                 color: isActive('/admin/contacts') ? '#11cdf0' : '#344767',
                 fontWeight: '500',
                 display: 'flex',
                 alignItems: 'center',
                 textDecoration: 'none',
-                transition: 'color 0.3s',
+                backgroundColor: isActive('/admin/contacts') ? '#d4edda' : '',
+                transition: 'color 0.3s, background-color 0.3s',
               }}
             >
               <i className="fas fa-address-book me-2" style={{ color: '#03a9f4' }}></i>
@@ -240,19 +265,20 @@ const Layout = ({ children }) => {
           </li>
 
           {/* Reviews */}
-          <li style={{ marginBottom: '6px' }}>
+          <li style={{ marginBottom: '12px' }}>
             <Link
               to="/admin/reviews"
               style={{
-                padding: '0.5rem 0.75rem',
+                padding: '0.75rem 1rem',
                 borderRadius: '0.5rem',
-                fontSize: '0.85rem',
+                fontSize: '1rem',
                 color: isActive('/admin/reviews') ? '#11cdf0' : '#344767',
                 fontWeight: '500',
                 display: 'flex',
                 alignItems: 'center',
                 textDecoration: 'none',
-                transition: 'color 0.3s',
+                backgroundColor: isActive('/admin/reviews') ? '#d4edda' : '',
+                transition: 'color 0.3s, background-color 0.3s',
               }}
             >
               <i className="fas fa-star me-2" style={{ color: '#ff9800' }}></i>
@@ -260,30 +286,66 @@ const Layout = ({ children }) => {
             </Link>
           </li>
 
-          {/* Other Links */}
-          {[
-            { path: '/admin/newsletter', icon: 'globe', text: 'N .Letter', color: '#e91e63' },
-          ].map((item, idx) => (
-            <li key={idx} style={{ marginBottom: '6px' }}>
-              <Link
-                to={item.path}
-                style={{
-                  padding: '0.5rem 0.75rem',
-                  borderRadius: '0.5rem',
-                  fontSize: '0.85rem',
-                  color: isActive(item.path) ? '#11cdf0' : '#344767',
-                  fontWeight: '500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  transition: 'color 0.3s',
-                }}
-              >
-                <i className={`fas fa-${item.icon} me-2`} style={{ color: item.color }}></i>
-                {item.text}
-              </Link>
-            </li>
-          ))}
+          {/* Newsletter with Submenu */}
+          <li style={{ marginBottom: '12px' }}>
+            <div
+              onClick={() => setShowNewsletterList(!showNewsletterList)}
+              style={{
+                cursor: 'pointer',
+                padding: '0.75rem 1rem',
+                borderRadius: '0.5rem',
+                fontSize: '1rem',
+                color: '#344767',
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'background-color 0.3s',
+              }}
+            >
+              <i className="fas fa-globe me-2" style={{ color: '#e91e63' }}></i>
+              N .Letter
+            </div>
+
+            {showNewsletterList && (
+              <ul style={{ listStyle: 'none', paddingLeft: '1.5rem', marginTop: '0.5rem', transition: 'all 1s ease' }}>
+                {['newsletter', 'newsletter-list'].map((sub, i) => (
+                  <li key={i} style={{ marginBottom: '12px' }}>
+                    <Link
+                      to={`/admin/${sub}`}
+                      style={{
+                        fontSize: '0.9rem',
+                        textDecoration: 'none',
+                        color: isActive(`/admin/${sub}`) ? '#11cdf0' : '#555',
+                        fontWeight: isActive(`/admin/${sub}`) ? '600' : '400',
+                        paddingLeft: '0.5rem',
+                        display: 'inline-block',
+                        backgroundColor: isActive(`/admin/${sub}`) ? '#d4edda' : '',
+                        borderRadius: '0.5rem',
+                        padding: '0.5rem 0.75rem',
+                        transition: 'color 0.3s, background-color 0.3s',
+                      }}
+                    >
+                      <>
+                        <i style={{ color: '#11cdf0' }}>{`->  `}</i>
+                        <i
+                          className={`fas ${{
+                            newsletter: 'fa-plus',
+                            'newsletter-list': 'fa-list',
+                          }[sub]} me-2`}
+                          style={{
+                            width: '18px',
+                            textAlign: 'center',
+                            color: '#e91e63',
+                          }}
+                        ></i>
+                        {sub === 'newsletter' ? 'Add NewsLetter' : 'List NewsLetter'}
+                      </>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
 
           {/* Divider */}
           <li
@@ -305,19 +367,20 @@ const Layout = ({ children }) => {
             { path: '/profile', icon: 'user', text: 'Profile', color: '#3f51b5' },
             { path: '/signout', icon: 'file-alt', text: 'Sign Out', color: '#f44336' },
           ].map((item, idx) => (
-            <li key={idx} style={{ marginBottom: '6px' }}>
+            <li key={idx} style={{ marginBottom: '12px' }}>
               <Link
                 to={item.path}
                 style={{
-                  padding: '0.5rem 0.75rem',
+                  padding: '0.75rem 1rem',
                   borderRadius: '0.5rem',
-                  fontSize: '0.85rem',
+                  fontSize: '1rem',
                   color: isActive(item.path) ? '#11cdf0' : '#344767',
                   fontWeight: '500',
                   display: 'flex',
                   alignItems: 'center',
                   textDecoration: 'none',
-                  transition: 'color 0.3s',
+                  backgroundColor: isActive(item.path) ? '#d4edda' : '',
+                  transition: 'color 0.3s, background-color 0.3s',
                 }}
               >
                 <i className={`fas fa-${item.icon} me-2`} style={{ color: item.color }}></i>

@@ -27,6 +27,7 @@ Route::get('/offers', [OfferController::class, 'index']);
 Route::get('/offers/{id}', [OfferController::class, 'show']);
 Route::post('/rooms/{id}/check-availability', [RoomController::class, 'checkAvailability']);
 Route::get('/reviews', [ReviewController::class, 'index']);
+Route::post('/newsletter-subscribe', [NewsletterSubscriptionController::class, 'store']);
 
 // New public route for testimonials
 Route::get('/testimonials', [ReviewController::class, 'testimonials']);
@@ -87,6 +88,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         // Newsletter management
         Route::get('/newsletters', [NewsletterController::class, 'index']);
+        Route::delete('/newsletters/{id}', [NewsletterController::class, 'destroy']);
         Route::post('/newsletters', [NewsletterController::class, 'store']);
     });
 });

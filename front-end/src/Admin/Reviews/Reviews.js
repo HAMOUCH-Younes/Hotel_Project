@@ -125,7 +125,7 @@ function Reviews() {
     }
   };
 
-  if (loading) return <div className="text-center mt-5">Loading...</div>;
+  if (loading) return <Layout><div className="text-center mt-5">Loading...</div></Layout>;
   if (error) return <div className="alert alert-danger mt-5">{error}</div>;
 
   return (

@@ -29,6 +29,7 @@ import AddOffer from './Admin/Offers/AddOffer';
 import AdminContacts from './Admin/AdminContacts/AdminContacts';
 import Reviews from './Admin/Reviews/Reviews';
 import NewsLetter from './Admin/NewsLetter/NewsLetter';
+import ListNewsLetter from './Admin/NewsLetter/ListNewsLetter';
 
 function App() {
   const location = useLocation();
@@ -70,6 +71,7 @@ function App() {
          <Route path="/admin/contacts" element={<AdminContacts />} />
          <Route path="/admin/reviews" element={<Reviews />} />
          <Route path="/admin/newsletter" element={<NewsLetter />} />
+          <Route path="/admin/newsletter-list" element={<ListNewsLetter />} />
          
 
         <Route path="*" element={<div>Page not found</div>} />

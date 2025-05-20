@@ -67,4 +67,20 @@ class NewsletterController extends Controller
             return response()->json(['error' => 'Failed to send newsletter.'], 500);
         }
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        try {
+            $newsletter = Newsletter::findOrFail($id);
+            $newsletter->delete();
+
+            return response()->json(['message' => 'Newsletter deleted successfully.']);
+        } catch (\Exception $e) {
+            Log::error('Failed to delete newsletter: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete newsletter.'], 500);
+        }
+    }
 }

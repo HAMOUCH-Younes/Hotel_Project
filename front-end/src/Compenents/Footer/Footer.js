@@ -22,7 +22,7 @@ const Footer = () => {
       });
       setEmail('');
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Subscription failed. Try again.', {
+      toast.error(error.response?.data?.message || 'Subscription failed. Please try again.', {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -73,7 +73,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          /* Support Links */
+          {/* Support Links */}
           <div className="col-md-3 mb-4">
             <h6 className="fw-bold text-uppercase mb-3">Support</h6>
             <ul className="list-unstyled">
@@ -85,7 +85,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          /* Newsletter */
+          {/* Newsletter */}
           <div className="col-md-3 mb-4">
             <h6 className="fw-bold text-uppercase mb-3">Stay Updated</h6>
             <p>Subscribe to our newsletter for travel inspiration and special offers.</p>
@@ -105,7 +105,7 @@ const Footer = () => {
           </div>
         </div>
 
-        /* Bottom Text */
+        {/* Bottom Text */}
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center border-top pt-3 mt-3">
           <p className="mb-2 mb-md-0">© 2025 QuickStay. All rights reserved.</p>
           <div className="d-flex gap-3">
@@ -116,7 +116,7 @@ const Footer = () => {
         </div>
       </div>
 
-      /* Toast Container */
+      {/* Toast Container */}
       <ToastContainer position="top-right" autoClose={5000} pauseOnHover closeOnClick draggable />
     </footer>
   );

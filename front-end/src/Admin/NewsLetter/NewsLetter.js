@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Layout from '../Layout/Layout';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,43 +7,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function NewsLetter() {
-  const [newsletters, setNewsletters] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     subject: '',
     message: '',
   });
-
-  // Fetch all newsletters on component mount
-  useEffect(() => {
-    const fetchNewsletters = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          setError('Authentication required. Please log in as an admin.');
-          setLoading(false);
-          return;
-        }
-
-        setLoading(true);
-        const response = await axios.get('http://127.0.0.1:8000/api/newsletters', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        setNewsletters(response.data || []);
-        setLoading(false);
-      } catch (err) {
-        setError(err.response?.data?.error || 'Failed to load newsletters. Please try again.');
-        setLoading(false);
-        console.error('Error fetching newsletters:', err);
-      }
-    };
-
-    fetchNewsletters();
-  }, []);
+  const [error, setError] = useState(null);
 
   // Handle form input changes
   const handleInputChange = (e) => {
@@ -67,7 +35,6 @@ function NewsLetter() {
         { headers: { 'Authorization': `Bearer ${token}` } }
       );
 
-      setNewsletters([response.data.newsletter, ...newsletters]);
       toast.success('Newsletter sent successfully to subscribers!', {
         position: "top-right",
         autoClose: 5000,
@@ -91,7 +58,6 @@ function NewsLetter() {
     }
   };
 
-  if (loading) return <div className="text-center mt-5"><div className="spinner-border" role="status"></div></div>;
   if (error) return <div className="alert alert-danger mt-5">{error}</div>;
 
   return (
@@ -99,8 +65,8 @@ function NewsLetter() {
       <div className="container mt-5 mb-5">
         {/* Header */}
         <div className="text-center mb-5">
-          <h2 className="fw-bold text-dark">Newsletter Management</h2>
-          <p className="text-muted">Compose and send newsletters to all subscribers with ease.</p>
+          <h2 className="fw-bold text-dark">Add Newsletter</h2>
+          <p className="text-muted">Compose and send a newsletter to all subscribers.</p>
         </div>
 
         {/* Form to Compose Newsletter */}
@@ -142,64 +108,6 @@ function NewsLetter() {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-
-        {/* Sent Newsletters List */}
-        <div className="card shadow-sm border-0 rounded-4">
-          <div className="card-header bg-light rounded-top-4">
-            <h5 className="mb-0 text-dark">Sent Newsletters</h5>
-          </div>
-          <div className="card-body p-0">
-            <div className="table-responsive">
-              <table className="table table-hover mb-0">
-                <thead className="bg-light">
-                  <tr>
-                    <th>Subject</th>
-                    <th>Sent At</th>
-                    <th>Message</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {newsletters.length === 0 && !loading && (
-                    <tr>
-                      <td colSpan="4" className="text-center text-muted py-4">
-                        No newsletters have been sent yet.
-                      </td>
-                    </tr>
-                  )}
-                  {newsletters.map((newsletter) => (
-                    <tr key={newsletter.id}>
-                      <td>{newsletter.subject}</td>
-                      <td>{new Date(newsletter.sent_at).toLocaleString()}</td>
-                      <td>
-                        <span
-                          style={{
-                            maxWidth: '300px',
-                            display: 'block',
-                            whiteSpace: 'nowrap',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                          }}
-                        >
-                          {newsletter.message}
-                        </span>
-                      </td>
-                      <td>
-                        <button
-                          className="btn btn-sm btn-outline-primary rounded-pill"
-                          onClick={() => alert(`Viewing: ${newsletter.subject}\n\n${newsletter.message}`)}
-                          disabled
-                        >
-                          View
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </div>
       </div>
