@@ -90,5 +90,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/newsletters', [NewsletterController::class, 'index']);
         Route::delete('/newsletters/{id}', [NewsletterController::class, 'destroy']);
         Route::post('/newsletters', [NewsletterController::class, 'store']);
+        
+        
     });
 });

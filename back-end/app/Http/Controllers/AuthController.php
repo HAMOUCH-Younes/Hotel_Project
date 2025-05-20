@@ -108,4 +108,20 @@ class AuthController extends Controller
             return response()->json(['message' => 'Unexpected error: ' . $e->getMessage()], 500);
         }
     }
+
+    public function logout(Request $request): JsonResponse
+    {
+        try {
+            $request->user()->currentAccessToken()->delete();
+            return response()->json(['message' => 'Successfully logged out'], 200);
+        } catch (Exception $e) {
+            Log::error('Logout error', [
+                'error' => $e->getMessage(),
+                'user_id' => $request->user()->id ?? 'unknown',
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+            return response()->json(['message' => 'Logout failed: ' . $e->getMessage()], 500);
+        }
+    }
 }

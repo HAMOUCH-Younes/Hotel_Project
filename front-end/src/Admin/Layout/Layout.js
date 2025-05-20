@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 const Layout = ({ children }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showTableList, setShowTableList] = useState(false);
   const [showOffersList, setShowOffersList] = useState(false);
   const [showNewsletterList, setShowNewsletterList] = useState(false);
@@ -25,6 +27,19 @@ const Layout = ({ children }) => {
     setShowOffersList((prev) => prev || isSubmenuActive('offers'));
     setShowNewsletterList((prev) => prev || isSubmenuActive('newsletter'));
   }, [location.pathname]);
+
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://127.0.0.1:8000/api/logout', {}, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      });
+      localStorage.removeItem('token'); // Clear the token
+      navigate('/'); // Redirect to home or login page (e.g., '/login')
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Optionally show a toast or alert for failure
+    }
+  };
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative', backgroundColor: '#f8f9fa' }}>
@@ -365,27 +380,51 @@ const Layout = ({ children }) => {
           {/* Account links */}
           {[
             { path: '/profile', icon: 'user', text: 'Profile', color: '#3f51b5' },
-            { path: '/signout', icon: 'file-alt', text: 'Sign Out', color: '#f44336' },
+            { path: null, icon: 'sign-out-alt', text: 'Log Out', color: '#f44336', onClick: handleLogout },
           ].map((item, idx) => (
             <li key={idx} style={{ marginBottom: '12px' }}>
-              <Link
-                to={item.path}
-                style={{
-                  padding: '0.75rem 1rem',
-                  borderRadius: '0.5rem',
-                  fontSize: '1rem',
-                  color: isActive(item.path) ? '#11cdf0' : '#344767',
-                  fontWeight: '500',
-                  display: 'flex',
-                  alignItems: 'center',
-                  textDecoration: 'none',
-                  backgroundColor: isActive(item.path) ? '#d4edda' : '',
-                  transition: 'color 0.3s, background-color 0.3s',
-                }}
-              >
-                <i className={`fas fa-${item.icon} me-2`} style={{ color: item.color }}></i>
-                {item.text}
-              </Link>
+              {item.path ? (
+                <Link
+                  to={item.path}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '1rem',
+                    color: isActive(item.path) ? '#11cdf0' : '#344767',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    textDecoration: 'none',
+                    backgroundColor: isActive(item.path) ? '#d4edda' : '',
+                    transition: 'color 0.3s, background-color 0.3s',
+                  }}
+                >
+                  <i className={`fas fa-${item.icon} me-2`} style={{ color: item.color }}></i>
+                  {item.text}
+                </Link>
+              ) : (
+                <button
+                  onClick={item.onClick}
+                  style={{
+                    padding: '0.75rem 1rem',
+                    borderRadius: '0.5rem',
+                    fontSize: '1rem',
+                    color: '#344767',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    textDecoration: 'none',
+                    backgroundColor: '',
+                    border: 'none',
+                    width: '100%',
+                    cursor: 'pointer',
+                    transition: 'color 0.3s, background-color 0.3s',
+                  }}
+                >
+                  <i className={`fas fa-${item.icon} me-2`} style={{ color: item.color }}></i>
+                  {item.text}
+                </button>
+              )}
             </li>
           ))}
         </ul>

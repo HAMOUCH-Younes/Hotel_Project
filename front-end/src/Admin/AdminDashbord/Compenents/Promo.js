@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, Carousel } from 'react-bootstrap';
+import p from '../../../assets/p.png';
 
 const slides = [
   {
@@ -22,11 +23,22 @@ const slides = [
       'https://images.unsplash.com/photo-1617042375876-a13e36732a04?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fGNvZGluZyUyQ2RldmVsb3BlcnxlbnwwfHwwfHx8MA==',
   },
   {
-    title: 'Deploy with Confidence',
+    title: 'Deploy with, Build Fast',
     description: 'Ship faster with stable, scalable setups.',
     image:
       'https://media.istockphoto.com/id/941594596/fr/photo/le-cloud-computing-avec-pluie-code-machine.webp?a=1&b=1&s=612x612&w=0&k=20&c=mE1XJgAeFWhX5HJP45u37H0g_xQPM_XZ-PQLWSNGAz4=',
   },
+  {
+    title: 'Deploy with Confidence',
+    description: 'Ship faster with stable, scalable setups.',
+    image:
+      'https://images.unsplash.com/photo-1747285726386-2f321b64d84c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw1MHx8fGVufDB8fHx8fA%3D%3D',
+  },
+   {
+    title: 'Design with Confidence',
+    description: 'Ship faster with stable, scalable setups.',
+    image:p
+    },
 ];
 
 const Promo = () => {
