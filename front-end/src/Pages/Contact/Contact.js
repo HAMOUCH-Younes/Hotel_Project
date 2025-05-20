@@ -23,7 +23,7 @@ function ContactForm() {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // Fetch initial user data
+  // Fetch initial user data (excluding contacts)
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -33,34 +33,35 @@ function ContactForm() {
           return;
         }
 
-        const response = await axios.get('http://127.0.0.1:8000/api/user', {
+        // Fetch user data including user_detail
+        const userResponse = await axios.get('http://127.0.0.1:8000/api/user', {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        const data = response.data;
 
-        // Debug: Log the fetched data
-        console.log('Fetched user data:', data);
+        const userData = userResponse.data;
+        console.log('Fetched user data:', userData);
 
-        // Pre-fill form data
+        // Pre-fill form with name, email, and phone_number from user data, leaving others empty
         setFormData({
-          phone_country_code: 'France +33', // Default, can be adjusted based on user data if stored
-          phone_number: data.user_detail?.phone_number || '',
-          sms_updates: false, // Default, can be adjusted if stored
-          emergency_contact_name: '',
-          emergency_country_code: 'France +33', // Default, can be adjusted
-          emergency_number: data.user_detail?.emergency_contact || '',
-          email: data.email || '',
-          country: 'France', // Default, can be adjusted
-          address: data.user_detail?.address || '',
-          address_details: '',
-          city: '',
-          state: '',
-          postal_code: '',
+          phone_country_code: 'France +33', // Default, not fetched
+          phone_number: userData.user_detail?.phone_number || '',
+          sms_updates: false, // Default, not fetched
+          emergency_contact_name: '', // Default, not fetched
+          emergency_country_code: 'France +33', // Default, not fetched
+          emergency_number: '', // Default, not fetched
+          email: userData.email || '',
+          country: 'France', // Default, not fetched
+          address: '', // Default, not fetched
+          address_details: '', // Default, not fetched
+          city: '', // Default, not fetched
+          state: '', // Default, not fetched
+          postal_code: '', // Default, not fetched
         });
       } catch (err) {
-        setError(err.response?.data?.message || 'Failed to load contact data. Please try again.');
+        setError(err.response?.data?.message || 'Failed to load user data. Please try again.');
+        console.error('Error fetching data:', err);
       }
     };
     fetchUserData();
@@ -81,22 +82,30 @@ function ContactForm() {
     setLoading(true);
 
     const payload = {
-      phone_number: formData.phone_number ? `${formData.phone_country_code.split(' ')[1]} ${formData.phone_number}` : null,
-      emergency_contact: formData.emergency_number ? `${formData.emergency_country_code.split(' ')[1]} ${formData.emergency_number}` : null,
-      address: formData.address || null,
-      email: formData.email || null, // Note: Email update might require a separate endpoint or validation
+      phone_country_code: formData.phone_country_code,
+      phone_number: formData.phone_number,
+      sms_updates: formData.sms_updates,
+      emergency_contact_name: formData.emergency_contact_name,
+      emergency_country_code: formData.emergency_country_code,
+      emergency_number: formData.emergency_number,
+      email: formData.email,
+      country: formData.country,
+      address: formData.address,
+      address_details: formData.address_details,
+      city: formData.city,
+      state: formData.state,
+      postal_code: formData.postal_code,
     };
 
     try {
-      const response = await axios.put('http://127.0.0.1:8000/api/user', payload, {
+      const response = await axios.post('http://127.0.0.1:8000/api/contacts', payload, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      localStorage.setItem('user', JSON.stringify(response.data));
-      setSuccess('Contact information updated successfully!');
+      setSuccess('Contact information saved successfully!');
     } catch (err) {
-      setError(err.response?.data?.message || 'An error occurred while updating your contact information. Please try again.');
+      setError(err.response?.data?.message || 'An error occurred while saving your contact information. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -113,12 +122,12 @@ function ContactForm() {
         }}
       >
         <button
-                  className="btn btn-link text-danger position-absolute top-0 start-0 mt-2 ms-4"
-                  style={{ fontSize: '1.5rem', padding: 0 }}
-                  onClick={() => window.history.back()}
-                >
-                  <FaTimes />
-                </button>
+          className="btn btn-link text-danger position-absolute top-0 start-0 mt-2 ms-4"
+          style={{ fontSize: '1.5rem', padding: 0 }}
+          onClick={() => window.history.back()}
+        >
+          <FaTimes />
+        </button>
         <h5 className="fw-bold mb-1">Contact</h5>
         <p className="text-muted mb-4" style={{ fontSize: '15px' }}>
           Partagez ces informations pour recevoir des mises à jour de voyages et des alertes liées à l’activité de votre compte.
@@ -149,6 +158,7 @@ function ContactForm() {
               value={formData.phone_number}
               onChange={handleChange}
               placeholder="Numéro de téléphone"
+              required
             />
           </div>
 
@@ -201,11 +211,16 @@ function ContactForm() {
 
           {/* Email */}
           <div className="mb-4">
-            <label className="form-label">E-mail</label>
-            <div className="mb-1">{formData.email || 'Non précisé'}</div>
-            <div className="form-text">
-              Vous pouvez modifier votre adresse e-mail dans Paramètres.
-            </div>
+            <label className="form-label">E-mail <span className="text-danger">*</span></label>
+            <input
+              type="email"
+              className="form-control"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Entrez votre e-mail"
+              required
+            />
           </div>
 
           {/* Adresse */}

@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 const Layout = ({ children }) => {
   const location = useLocation();
   const [showTableList, setShowTableList] = useState(false);
-  const [showOffersList, setShowOffersList] = useState(false); // New state for Offers submenu
+  const [showOffersList, setShowOffersList] = useState(false);
 
   const isActive = (path) => location.pathname === path;
 
@@ -120,7 +120,7 @@ const Layout = ({ children }) => {
                 {['hotels', 'rooms', 'bookings', 'users'].map((sub, i) => (
                   <li key={i} style={{ marginBottom: '0.6rem' }}>
                     <Link
-                      to={`/admin/${sub}`} // Changed to absolute path
+                      to={`/admin/${sub}`}
                       style={{
                         fontSize: '0.8rem',
                         textDecoration: 'none',
@@ -138,7 +138,7 @@ const Layout = ({ children }) => {
                             hotels: 'fa-hotel',
                             rooms: 'fa-bed',
                             bookings: 'fa-calendar-check',
-                            users: 'fa-user'
+                            users: 'fa-user',
                           }[sub]} me-2`}
                           style={{
                             width: '18px',
@@ -147,7 +147,7 @@ const Layout = ({ children }) => {
                               hotels: '#00bcd4',
                               rooms: '#4caf50',
                               bookings: '#ff9800',
-                              users: '#f44336'
+                              users: '#f44336',
                             }[sub],
                           }}
                         ></i>
@@ -185,7 +185,7 @@ const Layout = ({ children }) => {
                 {['offers', 'add-offers'].map((sub, i) => (
                   <li key={i} style={{ marginBottom: '0.6rem' }}>
                     <Link
-                      to={`/admin/${sub}`} // Changed to absolute path
+                      to={`/admin/${sub}`}
                       style={{
                         fontSize: '0.8rem',
                         textDecoration: 'none',
@@ -201,7 +201,7 @@ const Layout = ({ children }) => {
                         <i
                           className={`fas ${{
                             offers: 'fa-list',
-                            'add-offers': 'fa-plus'
+                            'add-offers': 'fa-plus',
                           }[sub]} me-2`}
                           style={{
                             width: '18px',
@@ -218,10 +218,51 @@ const Layout = ({ children }) => {
             )}
           </li>
 
+          {/* Contacts */}
+          <li style={{ marginBottom: '6px' }}>
+            <Link
+              to="/admin/contacts"
+              style={{
+                padding: '0.5rem 0.75rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.85rem',
+                color: isActive('/admin/contacts') ? '#11cdf0' : '#344767',
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                textDecoration: 'none',
+                transition: 'color 0.3s',
+              }}
+            >
+              <i className="fas fa-address-book me-2" style={{ color: '#03a9f4' }}></i>
+              Contacts
+            </Link>
+          </li>
+
+          {/* Reviews */}
+          <li style={{ marginBottom: '6px' }}>
+            <Link
+              to="/admin/reviews"
+              style={{
+                padding: '0.5rem 0.75rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.85rem',
+                color: isActive('/admin/reviews') ? '#11cdf0' : '#344767',
+                fontWeight: '500',
+                display: 'flex',
+                alignItems: 'center',
+                textDecoration: 'none',
+                transition: 'color 0.3s',
+              }}
+            >
+              <i className="fas fa-star me-2" style={{ color: '#ff9800' }}></i>
+              Reviews
+            </Link>
+          </li>
+
           {/* Other Links */}
           {[
-            { path: '/vr', icon: 'cube', text: 'Contacts', color: '#03a9f4' },
-            { path: '/rtl', icon: 'globe', text: 'N .Letter', color: '#e91e63' },
+            { path: '/admin/newsletter', icon: 'globe', text: 'N .Letter', color: '#e91e63' },
           ].map((item, idx) => (
             <li key={idx} style={{ marginBottom: '6px' }}>
               <Link

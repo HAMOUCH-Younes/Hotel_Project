@@ -12,8 +12,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\NewsletterSubscriptionController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Middleware\EnsureAdmin;
-
 
 // 🔓 Public Routes (no auth required)
 Route::post('/register', [AuthController::class, 'register']);
@@ -27,7 +27,6 @@ Route::get('/offers', [OfferController::class, 'index']);
 Route::get('/offers/{id}', [OfferController::class, 'show']);
 Route::post('/rooms/{id}/check-availability', [RoomController::class, 'checkAvailability']);
 Route::get('/reviews', [ReviewController::class, 'index']);
-Route::post('/newsletter-subscribe', [NewsletterSubscriptionController::class, 'subscribe']);
 
 // New public route for testimonials
 Route::get('/testimonials', [ReviewController::class, 'testimonials']);
@@ -83,8 +82,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/contacts/{id}', [ContactController::class, 'destroy']);
 
         // Review management
-        
         Route::put('/reviews/{id}', [ReviewController::class, 'update']);
         Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+
+        // Newsletter management
+        Route::get('/newsletters', [NewsletterController::class, 'index']);
+        Route::post('/newsletters', [NewsletterController::class, 'store']);
     });
 });
